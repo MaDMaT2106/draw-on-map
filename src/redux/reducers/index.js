@@ -4,3 +4,4 @@ import { getFigures } from "./reducer";
 export default combineReducers({
     getFigures,
 });
+

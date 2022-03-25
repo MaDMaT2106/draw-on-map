@@ -1,23 +1,12 @@
-<<<<<<< Updated upstream
 import React from 'react';
 
-const MainPage = () => {
-
-    return (
-        <></>
-    )
-}
-=======
-import React from "react";
 import Map from "../Map/Map";
-
 import Autocomplete from "../Autocomplete/Autocomplete";
 import { useJsApiLoader } from "@react-google-maps/api";
 
 import { getBrowserLocation } from "../../utils/geo";
 
 import styles from "./MainPage.module.css";
-
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 const defaultCenter = {
@@ -27,8 +16,8 @@ const defaultCenter = {
 
 const libraries = ["places"];
 
-const MainPage = () => {
 
+const MainPage = () => {
   const [center, setCenter] = React.useState(defaultCenter);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -57,9 +46,10 @@ const MainPage = () => {
       </div>
       {isLoaded ? <Map center={center} /> : <h2>Loading</h2>}
 
+
     </div>
   );
 };
->>>>>>> Stashed changes
+
 
 export default MainPage;

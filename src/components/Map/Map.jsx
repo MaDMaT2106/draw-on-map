@@ -1,5 +1,6 @@
 import React from "react";
 import style from "./Map.module.css";
+
 import { GoogleMap, Polygon, Polyline } from "@react-google-maps/api";
 import { Circle } from "@react-google-maps/api";
 import { defaultTheme } from "./Theme";
@@ -7,6 +8,7 @@ import { figureData } from "../../redux/actions/figures.js";
 
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+
 
 const containerStyle = {
   width: "100%",
@@ -27,7 +29,9 @@ const defaultOptions = {
   fullscreenControl: false,
   styles: defaultTheme,
 };
+
 const Map = ({ center }) => {
+  
   const dispatch = useDispatch();
 
   const [rad, setRad] = useState(30000);
@@ -35,6 +39,14 @@ const Map = ({ center }) => {
   const figures = useSelector((state) => state.getFigures.figures);
 
   const mapRef = React.useRef(undefined);
+  
+  const onLoad = React.useCallback(function callback(map) {
+    mapRef.current = map;
+  }, []);
+
+  const onUnmount = React.useCallback(function callback(map) {
+    mapRef.current = undefined;
+  }, []);
 
   if (figures.length !== 0) {
     return (
@@ -43,6 +55,8 @@ const Map = ({ center }) => {
           mapContainerStyle={containerStyle}
           center={center}
           zoom={10}
+          onLoad={onLoad}
+          onUnmount={onUnmount}
           options={defaultOptions}
         >
           {figures.map((object, index) => {
@@ -144,6 +158,8 @@ const Map = ({ center }) => {
           mapContainerStyle={containerStyle}
           center={center}
           zoom={10}
+        onLoad={onLoad}
+        onUnmount={onUnmount}
           options={defaultOptions}
         ></GoogleMap>
         <button
@@ -162,6 +178,5 @@ const Map = ({ center }) => {
       </div>
     );
   }
-};
 
 export default React.memo(Map);
