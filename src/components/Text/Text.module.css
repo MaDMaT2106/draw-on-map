@@ -1,0 +1,29 @@
+.textContainer {
+  position: fixed;
+  right: 20px;
+  bottom: 15%;
+  width: 300px;
+  max-height: 300px;
+  padding: 10px;
+  border-radius: 5px;
+  background: #ffff;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.formBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+.formBlock label {
+  margin-bottom: 5px;
+}
+.input {
+  border-radius: 5px;
+  border: 1px solid #0000;
+  outline: auto;
+}
