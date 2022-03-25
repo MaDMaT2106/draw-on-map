@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Map from "../Map/Map";
 import { useJsApiLoader } from "@react-google-maps/api";
 
+import Map from "../Map/Map";
 import Autocomplete from "../Autocomplete/Autocomplete";
 import Text from "../Text/Text";
 
@@ -33,7 +33,6 @@ const MainPage = () => {
   const onPlaceSelect = React.useCallback((coordinates) => {
     setCenter(coordinates);
   }, []);
-  console.log(infoText);
 
   React.useEffect(() => {
     getBrowserLocation()

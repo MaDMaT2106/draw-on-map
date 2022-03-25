@@ -10,3 +10,6 @@
   transform: translateX(-50%);
   z-index: 10;
 }
+.buttons {
+  z-index: 10;
+}
