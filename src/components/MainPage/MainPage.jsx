@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+
 import Map from "../Map/Map";
 import Autocomplete from "../Autocomplete/Autocomplete";
 import { useJsApiLoader } from "@react-google-maps/api";
@@ -14,6 +15,7 @@ const defaultCenter = {
 };
 
 const libraries = ["places"];
+
 
 const MainPage = () => {
   const [center, setCenter] = React.useState(defaultCenter);
@@ -43,8 +45,11 @@ const MainPage = () => {
         <Autocomplete isLoaded={isLoaded} onSelect={onPlaceSelect} />
       </div>
       {isLoaded ? <Map center={center} /> : <h2>Loading</h2>}
+
+
     </div>
   );
 };
+
 
 export default MainPage;
