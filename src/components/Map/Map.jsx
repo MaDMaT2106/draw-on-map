@@ -54,9 +54,6 @@ const Map = ({ center }) => {
 
   const [selectedShape, setSelectedShape] = useState(null);
 
-  console.log(allShapes);
-  console.log(selectedShape);
-
   const types = ["circle", "polyline", "polygon", "text", "arrow"];
 
   const figures = useSelector((state) => state.getFigures.figures);
@@ -70,11 +67,7 @@ const Map = ({ center }) => {
   const onUnmount = React.useCallback(function callback(map) {
     mapRef.current = undefined;
   }, []);
-
-  const onLoadInfo = () => {};
-
-  console.log(typeFigure);
-
+  
   return (
     <div className={style.container}>
       <GoogleMap
@@ -86,7 +79,22 @@ const Map = ({ center }) => {
         options={defaultOptions}
       >
         <DrawingManager
-          options={{ drawingControl: false }}
+          options={{ drawingControl: false,
+            polylineOptions:{
+            icons:
+                typeFigure === 'arrow'
+                  ? [
+                      {
+                        icon: {
+                          path: window.google.maps.SymbolPath
+                            .FORWARD_CLOSED_ARROW,
+                        },
+                        offset: '100%',
+                      },
+                    ]
+                  : null,
+            }
+           }}
           drawingMode={
             drawing && typeFigure === "circle"
               ? window.google.maps.drawing.OverlayType.CIRCLE
