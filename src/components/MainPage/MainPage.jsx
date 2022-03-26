@@ -1,8 +1,10 @@
-import React from 'react';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 import Map from "../Map/Map";
 import Autocomplete from "../Autocomplete/Autocomplete";
-import { useJsApiLoader } from "@react-google-maps/api";
+import Text from "../Text/Text";
 
 import { getBrowserLocation } from "../../utils/geo";
 
@@ -16,8 +18,11 @@ const defaultCenter = {
 
 const libraries = ["places",'drawing'];
 
-
 const MainPage = () => {
+  const dispatch = useDispatch();
+
+  const showModal = useSelector((state) => state.textReducer.showModal);
+  const infoText = useSelector((state) => state.textReducer.infoText);
   const [center, setCenter] = React.useState(defaultCenter);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -45,11 +50,9 @@ const MainPage = () => {
         <Autocomplete isLoaded={isLoaded} onSelect={onPlaceSelect} />
       </div>
       {isLoaded ? <Map center={center} /> : <h2>Loading</h2>}
-
-
+      {showModal && <Text />}
     </div>
   );
 };
-
 
 export default MainPage;
