@@ -1,12 +1,18 @@
 import React from "react";
 import style from "./Map.module.css";
 
-import { GoogleMap, Polygon, Polyline } from "@react-google-maps/api";
-import { Circle } from "@react-google-maps/api";
+import { GoogleMap } from "@react-google-maps/api";
+import { InfoWindow } from "@react-google-maps/api";
 import { defaultTheme } from "./Theme";
-import { figureData } from "../../redux/actions/figures.js";
+import { DrawingManager } from "@react-google-maps/api";
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 const containerStyle = {
@@ -36,9 +42,15 @@ const defaultOptions = {
 };
 
 const Map = ({ center }) => {
+  const [valueDropdown, setValueDropdown] = useState(false);
+
   const dispatch = useDispatch();
 
-  const [rad, setRad] = useState(30000);
+  const [typeFigure, setTypeFigure] = useState();
+
+  const [drawing, setDrawing] = useState(false);
+
+  const types = ["circle", "polyline", "polygon", "text", "arrow"];
 
   const figures = useSelector((state) => state.getFigures.figures);
 
@@ -52,135 +64,58 @@ const Map = ({ center }) => {
     mapRef.current = undefined;
   }, []);
 
-  if (figures.length !== 0) {
-    return (
-      <div className={style.container}>
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={10}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-          options={defaultOptions}
-        >
-          {figures.map((object, index) => {
-            switch (object.type) {
-              case "circle":
-                return (
-                  <Circle
-                    center={center}
-                    radius={rad}
-                    options={{
-                      strokeColor: "#FF0000",
-                      strokeOpacity: 0.8,
-                      strokeWeight: 2,
-                      fillColor: "#FF0000",
-                      fillOpacity: 0.35,
-                      clickable: false,
-                      draggable: false,
-                      editable: true,
-                      visible: true,
-                      zIndex: 1,
-                    }}
-                    key={index}
-                  />
-                );
-              case "polygon":
-                return (
-                  <Polygon
-                    paths={[
-                      { lat: 25.774, lng: -80.19 },
-                      { lat: 18.466, lng: -66.118 },
-                      { lat: 32.321, lng: -64.757 },
-                      { lat: 25.774, lng: -80.19 },
-                    ]}
-                    options={{
-                      fillColor: "lightblue",
-                      fillOpacity: 1,
-                      strokeColor: "red",
-                      strokeOpacity: 1,
-                      strokeWeight: 2,
-                      clickable: false,
-                      draggable: false,
-                      editable: true,
-                      geodesic: false,
-                      zIndex: 1,
-                    }}
-                  />
-                );
-              case "polyline":
-                return (
-                  <Polyline
-                    path={[
-                      { lat: 37.772, lng: -122.214 },
-                      { lat: 21.291, lng: -157.821 },
-                      { lat: -18.142, lng: 178.431 },
-                      { lat: -27.467, lng: 153.027 },
-                    ]}
-                    options={{
-                      strokeColor: "#FF0000",
-                      strokeOpacity: 0.8,
-                      strokeWeight: 2,
-                      fillColor: "#FF0000",
-                      fillOpacity: 0.35,
-                      clickable: false,
-                      draggable: false,
-                      editable: true,
-                      visible: true,
-                      radius: rad,
-                      paths: [
-                        { lat: 37.772, lng: -122.214 },
-                        { lat: 21.291, lng: -157.821 },
-                        { lat: -18.142, lng: 178.431 },
-                        { lat: -27.467, lng: 153.027 },
-                      ],
-                      zIndex: 1,
-                    }}
-                  />
-                );
-            }
-          })}
-        </GoogleMap>
-        <button
-          className={style.buttons}
-          onClick={() => {
-            console.log(figures);
-            figures.push({ type: "circle" });
-            setRad(rad + 1);
-            dispatch(figureData(figures));
-            console.log(figures);
-          }}
-        >
-          Circle
-        </button>
-      </div>
-    );
-  } else if (figures.length === 0) {
-    return (
-      <div className={style.container}>
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={10}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-          options={defaultOptions}
-        ></GoogleMap>
-        <button
-          className={style.buttons}
-          onClick={() => {
-            console.log(figures);
+  const onLoadInfo = () => {};
 
-            figures.push({ type: "circle" });
-            setRad(rad + 1);
+  console.log(typeFigure);
 
-            dispatch(figureData(figures));
-          }}
+  return (
+    <div className={style.container}>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={10}
+        onLoad={onLoad}
+        onUnmount={onUnmount}
+        options={defaultOptions}
+      >
+        <DrawingManager
+          options={{ drawingControl: false }}
+          drawingMode={
+            drawing && typeFigure === "circle"
+              ? window.google.maps.drawing.OverlayType.CIRCLE
+              : drawing && typeFigure === "polyline"
+              ? window.google.maps.drawing.OverlayType.POLYLINE
+              : drawing && typeFigure === "polygon"
+              ? window.google.maps.drawing.OverlayType.POLYGON
+              : drawing && typeFigure === "arrow"
+              ? window.google.maps.drawing.OverlayType.POLYLINE
+              : null
+          }
+        />
+      </GoogleMap>
+      <div className={style.dropdown}>
+        <Dropdown
+          isOpen={valueDropdown}
+          toggle={() => setValueDropdown(!valueDropdown)}
         >
-          Circle
-        </button>
+          <DropdownToggle caret>+</DropdownToggle>
+          <DropdownMenu>
+            {types.map((item, i) => (
+              <DropdownItem
+                key={i}
+                onClick={() => {
+                  setTypeFigure(item);
+                  setDrawing(true);
+                  //   setSelectedShape(null);
+                }}
+              >
+                <div>{item}</div>
+              </DropdownItem>
+            ))}
+          </DropdownMenu>
+        </Dropdown>
       </div>
-    );
-  }
+    </div>
+  );
 };
 export default React.memo(Map);

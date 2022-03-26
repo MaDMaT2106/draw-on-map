@@ -16,7 +16,7 @@ const defaultCenter = {
   lng: -38.523,
 };
 
-const libraries = ["places"];
+const libraries = ["places",'drawing'];
 
 const MainPage = () => {
   const dispatch = useDispatch();
