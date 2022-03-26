@@ -41,11 +41,16 @@ const Map = ({ center }) => {
 
   const dispatch = useDispatch();
 
-  const [typeFigure,setTypeFigure] = useState()
+  const [typeFigure, setTypeFigure] = useState();
 
-  const [drawing,setDrawing] = useState(false)
+  const [drawing, setDrawing] = useState(false);
 
+  const [allShapes, setAllShapes] = useState([]);
 
+  const [selectedShape, setSelectedShape] = useState(null);
+
+  console.log(allShapes);
+  console.log(selectedShape);
 
   const types = ["circle", "polyline", "polygon", "text", "arrow"];
 
@@ -59,10 +64,7 @@ const Map = ({ center }) => {
 
   const onUnmount = React.useCallback(function callback(map) {
     mapRef.current = undefined;
-
   }, []);
-
-  console.log(typeFigure)
 
   return (
     <div className={style.container}>
@@ -74,20 +76,25 @@ const Map = ({ center }) => {
         onUnmount={onUnmount}
         options={defaultOptions}
       >
-        <DrawingManager options={
-          {drawingControl: false}
-        } 
-        drawingMode={
-            drawing && typeFigure === 'circle'
+        <DrawingManager
+          options={{ drawingControl: false }}
+          drawingMode={
+            drawing && typeFigure === "circle"
               ? window.google.maps.drawing.OverlayType.CIRCLE
-              : drawing && typeFigure === 'polyline'
+              : drawing && typeFigure === "polyline"
               ? window.google.maps.drawing.OverlayType.POLYLINE
-              : drawing && typeFigure === 'polygon'
+              : drawing && typeFigure === "polygon"
               ? window.google.maps.drawing.OverlayType.POLYGON
-              : drawing && typeFigure === 'arrow'
+              : drawing && typeFigure === "arrow"
               ? window.google.maps.drawing.OverlayType.POLYLINE
               : null
           }
+          onOverlayComplete={(e) => {
+            setAllShapes([...allShapes, e]);
+            window.google.maps.event.addListener(e.overlay, "click", () => {
+              setSelectedShape(e);
+            });
+          }}
         />
       </GoogleMap>
       <Dropdown
@@ -102,7 +109,7 @@ const Map = ({ center }) => {
               onClick={() => {
                 setTypeFigure(item);
                 setDrawing(true);
-              //   setSelectedShape(null);
+                setSelectedShape(null);
               }}
             >
               <div>{item}</div>
@@ -110,6 +117,23 @@ const Map = ({ center }) => {
           ))}
         </DropdownMenu>
       </Dropdown>
+      <input
+        type="color"
+        id="favcolor"
+        onChange={(e) => {
+          selectedShape.overlay.setOptions({ fillColor: e.target.value });
+        }}
+        name="favcolor"
+      />
+      <input
+        type="color"
+        id="strokecolor"
+        onChange={(e) => {
+          selectedShape.overlay.setOptions({ strokeColor: e.target.value });
+        }}
+        name="strokecolor"
+      />
+      <button onClick={(e)=>selectedShape.overlay.setMap(null)}>Delete</button>
     </div>
   );
 };
