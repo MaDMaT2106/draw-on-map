@@ -8,9 +8,27 @@
   top: 0;
   z-index: 10;
 }
-
-.dropdown {
+.menu {
   position: fixed;
   top: 5px;
-  left: 28%;
+  left: 12%;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.colorInput {
+  display: flex;
+  gap: 5px;
+}
+.delete {
+  width: 80px;
+  height: 38px;
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+  border-radius: 5px;
+}
+.delete:hover {
+  background-color: #5c636a;
+  border-color: #565e64;
 }

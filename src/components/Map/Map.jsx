@@ -50,6 +50,13 @@ const Map = ({ center }) => {
 
   const [drawing, setDrawing] = useState(false);
 
+  const [allShapes, setAllShapes] = useState([]);
+
+  const [selectedShape, setSelectedShape] = useState(null);
+
+  console.log(allShapes);
+  console.log(selectedShape);
+
   const types = ["circle", "polyline", "polygon", "text", "arrow"];
 
   const figures = useSelector((state) => state.getFigures.figures);
@@ -91,29 +98,64 @@ const Map = ({ center }) => {
               ? window.google.maps.drawing.OverlayType.POLYLINE
               : null
           }
+          onOverlayComplete={(e) => {
+            setAllShapes([...allShapes, e]);
+            window.google.maps.event.addListener(e.overlay, "click", () => {
+              setSelectedShape(e);
+            });
+          }}
         />
       </GoogleMap>
-      <div className={style.dropdown}>
-        <Dropdown
-          isOpen={valueDropdown}
-          toggle={() => setValueDropdown(!valueDropdown)}
+
+      <div className={style.menu}>
+        <div className={style.dropdown}>
+          <Dropdown
+            isOpen={valueDropdown}
+            toggle={() => setValueDropdown(!valueDropdown)}
+          >
+            <DropdownToggle caret>+</DropdownToggle>
+            <DropdownMenu>
+              {types.map((item, i) => (
+                <DropdownItem
+                  key={i}
+                  onClick={() => {
+                    setTypeFigure(item);
+                    setDrawing(true);
+                    setSelectedShape(null);
+                  }}
+                >
+                  <div>{item}</div>
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+
+        <div className={style.colorInput}>
+          <input
+            type="color"
+            id="favcolor"
+            onChange={(e) => {
+              selectedShape.overlay.setOptions({ fillColor: e.target.value });
+            }}
+            name="favcolor"
+          />
+          <input
+            type="color"
+            id="strokecolor"
+            onChange={(e) => {
+              selectedShape.overlay.setOptions({ strokeColor: e.target.value });
+            }}
+            name="strokecolor"
+          />
+        </div>
+
+        <button
+          className={style.delete}
+          onClick={(e) => selectedShape.overlay.setMap(null)}
         >
-          <DropdownToggle caret>+</DropdownToggle>
-          <DropdownMenu>
-            {types.map((item, i) => (
-              <DropdownItem
-                key={i}
-                onClick={() => {
-                  setTypeFigure(item);
-                  setDrawing(true);
-                  //   setSelectedShape(null);
-                }}
-              >
-                <div>{item}</div>
-              </DropdownItem>
-            ))}
-          </DropdownMenu>
-        </Dropdown>
+          Delete
+        </button>
       </div>
     </div>
   );
