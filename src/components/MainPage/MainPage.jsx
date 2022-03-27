@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useJsApiLoader } from "@react-google-maps/api";
 
 import Map from "../Map/Map";
@@ -16,13 +16,10 @@ const defaultCenter = {
   lng: -38.523,
 };
 
-const libraries = ["places",'drawing'];
+const libraries = ["places", "drawing"];
 
 const MainPage = () => {
-  const dispatch = useDispatch();
-
   const showModal = useSelector((state) => state.textReducer.showModal);
-  const infoText = useSelector((state) => state.textReducer.infoText);
   const [center, setCenter] = React.useState(defaultCenter);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",

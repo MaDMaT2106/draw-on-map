@@ -1,10 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "./Map.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import { GoogleMap, InfoWindow, DrawingManager } from "@react-google-maps/api";
 
-import { GoogleMap } from "@react-google-maps/api";
-import { InfoWindow } from "@react-google-maps/api";
-import { defaultTheme } from "./Theme";
-import { DrawingManager } from "@react-google-maps/api";
 import {
   Dropdown,
   DropdownToggle,
@@ -12,19 +10,17 @@ import {
   DropdownItem,
 } from "reactstrap";
 
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { defaultTheme } from "./Theme";
+import {
+  setModal,
+  setMarkerPosition,
+  deleteInfoText,
+} from "../../redux/actions/text";
 
 const containerStyle = {
   width: "100%",
   height: "100%",
 };
-
-const positions = [
-  { lat: 49.204345729017966, lng: 28.471893808478217 },
-  { lat: 60.204345729017966, lng: 28.471893808478217 },
-  { lat: 88.204345729017966, lng: 28.471893808478217 },
-];
 
 const defaultOptions = {
   panControl: true,
@@ -44,14 +40,13 @@ const defaultOptions = {
 const Map = ({ center }) => {
   const [valueDropdown, setValueDropdown] = useState(false);
 
-  const [active,setActive]= useState(false)
+  const [active, setActive] = useState(false);
+
+  const infoText = useSelector((state) => state.textReducer.infoText);
 
   const [typeFigure, setTypeFigure] = useState();
-
   const [drawing, setDrawing] = useState(false);
-
   const [allShapes, setAllShapes] = useState([]);
-
   const [selectedShape, setSelectedShape] = useState(null);
 
   const types = ["circle", "polyline", "polygon", "text", "arrow"];
@@ -66,6 +61,17 @@ const Map = ({ center }) => {
     mapRef.current = undefined;
   }, []);
 
+  const onClick = (loc) => {
+    const coords = {
+      lat: loc.latLng.lat(),
+      lng: loc.latLng.lng(),
+    };
+    if (typeFigure === "text") {
+      dispatch(setModal(true));
+      dispatch(setMarkerPosition(coords));
+    }
+  };
+
   return (
     <div className={style.container}>
       <GoogleMap
@@ -74,25 +80,27 @@ const Map = ({ center }) => {
         zoom={10}
         onLoad={onLoad}
         onUnmount={onUnmount}
+        onClick={onClick}
         options={defaultOptions}
       >
         <DrawingManager
-          options={{ drawingControl: false,
-            polylineOptions:{
-            icons:
-                typeFigure === 'arrow'
+          options={{
+            drawingControl: false,
+            polylineOptions: {
+              icons:
+                typeFigure === "arrow"
                   ? [
                       {
                         icon: {
                           path: window.google.maps.SymbolPath
                             .FORWARD_CLOSED_ARROW,
                         },
-                        offset: '100%',
+                        offset: "100%",
                       },
                     ]
                   : null,
-            }
-           }}
+            },
+          }}
           drawingMode={
             drawing && typeFigure === "circle"
               ? window.google.maps.drawing.OverlayType.CIRCLE
@@ -111,6 +119,21 @@ const Map = ({ center }) => {
             });
           }}
         />
+
+        {infoText &&
+          infoText.map((item) => (
+            <InfoWindow
+              position={item.position}
+              key={item.title}
+              onCloseClick={(e) =>
+                console.log(dispatch(deleteInfoText(infoText, item.title)))
+              }
+            >
+              <p>
+                <strong>{item.title}</strong>
+              </p>
+            </InfoWindow>
+          ))}
       </GoogleMap>
 
       <div className={style.menu}>
@@ -128,7 +151,7 @@ const Map = ({ center }) => {
                     setTypeFigure(item);
                     setDrawing(true);
                     setSelectedShape(null);
-                    setActive(true)
+                    setActive(true);
                   }}
                 >
                   <div>{item}</div>
@@ -137,44 +160,57 @@ const Map = ({ center }) => {
             </DropdownMenu>
           </Dropdown>
         </div>
-          <div 
-          className={active? style.activeMenu :style.disableMenu}
-          
+        <div className={active ? style.activeMenu : style.disableMenu}>
+          <div className={style.colorInput}>
+            <input
+              type="color"
+              id="favcolor"
+              onChange={(e) => {
+                selectedShape.overlay.setOptions({ fillColor: e.target.value });
+              }}
+              name="favcolor"
+            />
+            <input
+              type="color"
+              id="strokecolor"
+              onChange={(e) => {
+                selectedShape.overlay.setOptions({
+                  strokeColor: e.target.value,
+                });
+              }}
+              name="strokecolor"
+            />
+          </div>
 
+          <button
+            className={style.delete}
+            onClick={(e) => selectedShape.overlay.setMap(null)}
           >
-        <div className={style.colorInput}>
+            Delete
+          </button>
+
           <input
-            type="color"
-            id="favcolor"
+            className={style.input}
+            type="range"
+            id="vol"
+            name="vol"
+            min="0"
+            max="50"
             onChange={(e) => {
-              selectedShape.overlay.setOptions({ fillColor: e.target.value });
+              selectedShape.overlay.setOptions({
+                strokeWeight: e.target.value,
+              });
             }}
-            name="favcolor"
           />
-          <input
-            type="color"
-            id="strokecolor"
-            onChange={(e) => {
-              selectedShape.overlay.setOptions({ strokeColor: e.target.value });
+          <button
+            className={style.delete}
+            onClick={(e) => {
+              setActive(false);
             }}
-            name="strokecolor"
-          />
+          >
+            Cancell
+          </button>
         </div>
-
-        <button
-          className={style.delete}
-          onClick={(e) => selectedShape.overlay.setMap(null)}
-        >
-          Delete
-        </button>
-
-        <input className={style.input} type="range" id="vol" name="vol" min="0" max="50" onChange={(e)=>{
-          selectedShape.overlay.setOptions({ strokeWeight: e.target.value });
-        }}/>
-        <button className={style.delete} onClick={(e)=>{setActive(false)}}>Cancell</button>
-
-        </div>
-
       </div>
     </div>
   );
