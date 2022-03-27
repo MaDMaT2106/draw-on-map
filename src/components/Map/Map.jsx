@@ -44,7 +44,7 @@ const defaultOptions = {
 const Map = ({ center }) => {
   const [valueDropdown, setValueDropdown] = useState(false);
 
-  const dispatch = useDispatch();
+  const [active,setActive]= useState(false)
 
   const [typeFigure, setTypeFigure] = useState();
 
@@ -56,8 +56,6 @@ const Map = ({ center }) => {
 
   const types = ["circle", "polyline", "polygon", "text", "arrow"];
 
-  const figures = useSelector((state) => state.getFigures.figures);
-
   const mapRef = React.useRef(undefined);
 
   const onLoad = React.useCallback(function callback(map) {
@@ -67,7 +65,7 @@ const Map = ({ center }) => {
   const onUnmount = React.useCallback(function callback(map) {
     mapRef.current = undefined;
   }, []);
-  
+
   return (
     <div className={style.container}>
       <GoogleMap
@@ -130,6 +128,7 @@ const Map = ({ center }) => {
                     setTypeFigure(item);
                     setDrawing(true);
                     setSelectedShape(null);
+                    setActive(true)
                   }}
                 >
                   <div>{item}</div>
@@ -138,7 +137,11 @@ const Map = ({ center }) => {
             </DropdownMenu>
           </Dropdown>
         </div>
+          <div 
+          className={active? style.activeMenu :style.disableMenu}
+          
 
+          >
         <div className={style.colorInput}>
           <input
             type="color"
@@ -164,6 +167,14 @@ const Map = ({ center }) => {
         >
           Delete
         </button>
+
+        <input className={style.input} type="range" id="vol" name="vol" min="0" max="50" onChange={(e)=>{
+          selectedShape.overlay.setOptions({ strokeWeight: e.target.value });
+        }}/>
+        <button className={style.delete} onClick={(e)=>{setActive(false)}}>Cancell</button>
+
+        </div>
+
       </div>
     </div>
   );
