@@ -27,18 +27,18 @@
   border-color: #6c757d;
   color: #fff;
   border-radius: 5px;
-  margin-left: 30px;
+  margin-left: 5px;
 }
 .delete:hover {
   background-color: #5c636a;
   border-color: #565e64;
 }
-.disableMenu{
-   display:none;
+.disableMenu {
+  display: none;
 }
-.activeMenu{
-  display:flex;
+.activeMenu {
+  display: flex;
 }
-.input{
+.input {
   margin-left: 10px;
 }

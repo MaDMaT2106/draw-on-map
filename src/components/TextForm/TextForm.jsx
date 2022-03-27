@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { setModal, setInfoText } from "../../redux/actions/text";
 
-import styles from "./Text.module.css";
+import styles from "./TextForm.module.css";
 
-const Text = () => {
+const TextForm = () => {
   const dispatch = useDispatch();
   const position = useSelector((state) => state.textReducer.markerPosition);
 
@@ -21,6 +21,9 @@ const Text = () => {
     dispatch(setInfoText(values));
     dispatch(setModal(false));
   };
+  const onClick = () => {
+    dispatch(setModal(false));
+  };
 
   return (
     <div className={styles.textContainer}>
@@ -34,12 +37,17 @@ const Text = () => {
           <textarea className={styles.input} name="description" />
         </div>
         <div className={styles.submitBlock}>
-          <input type="submit" value="Post" />
-          <input type="reset" value="Reset" />
+          <input type="submit" value="Post" className={styles.button} />
+          <input
+            type="reset"
+            value="Reset"
+            className={styles.button}
+            onClick={onClick}
+          />
         </div>
       </form>
     </div>
   );
 };
 
-export default Text;
+export default TextForm;

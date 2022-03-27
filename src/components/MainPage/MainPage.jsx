@@ -4,7 +4,7 @@ import { useJsApiLoader } from "@react-google-maps/api";
 
 import Map from "../Map/Map";
 import Autocomplete from "../Autocomplete/Autocomplete";
-import Text from "../Text/Text";
+import TextForm from "../TextForm/TextForm";
 
 import { getBrowserLocation } from "../../utils/geo";
 
@@ -47,7 +47,7 @@ const MainPage = () => {
         <Autocomplete isLoaded={isLoaded} onSelect={onPlaceSelect} />
       </div>
       {isLoaded ? <Map center={center} /> : <h2>Loading</h2>}
-      {showModal && <Text />}
+      {showModal && <TextForm />}
     </div>
   );
 };
