@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import style from "./Map.module.css";
-import { useSelector, useDispatch } from "react-redux";
-import { GoogleMap, InfoWindow, DrawingManager } from "@react-google-maps/api";
+import { useDispatch } from "react-redux";
+import { GoogleMap, DrawingManager } from "@react-google-maps/api";
 
 import {
   Dropdown,
@@ -11,11 +11,10 @@ import {
 } from "reactstrap";
 
 import { defaultTheme } from "./Theme";
-import {
-  setModal,
-  setMarkerPosition,
-  deleteInfoText,
-} from "../../redux/actions/text";
+
+import MyInfoWindow from "../InfoWindow/InfoWindow";
+
+import { setModal, setMarkerPosition } from "../../redux/actions/text";
 
 const containerStyle = {
   width: "100%",
@@ -43,9 +42,9 @@ const Map = ({ center }) => {
   
   const [valueDropdown, setValueDropdown] = useState(false);
 
-  const [active, setActive] = useState(false);
+  const dispatch = useDispatch();
 
-  const infoText = useSelector((state) => state.textReducer.infoText);
+  const [active, setActive] = useState(false);
 
   const [typeFigure, setTypeFigure] = useState();
   const [drawing, setDrawing] = useState(false);
@@ -123,20 +122,7 @@ const Map = ({ center }) => {
           }}
         />
 
-        {infoText &&
-          infoText.map((item) => (
-            <InfoWindow
-              position={item.position}
-              key={item.title}
-              onCloseClick={(e) =>
-                console.log(dispatch(deleteInfoText(infoText, item.title)))
-              }
-            >
-              <p>
-                <strong>{item.title}</strong>
-              </p>
-            </InfoWindow>
-          ))}
+        <MyInfoWindow />
       </GoogleMap>
 
       <div className={style.menu}>
