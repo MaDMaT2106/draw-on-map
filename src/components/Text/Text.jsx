@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setModal, setInfoText } from "../../redux/actions/text";
 
@@ -7,6 +7,7 @@ import styles from "./Text.module.css";
 
 const Text = () => {
   const dispatch = useDispatch();
+  const position = useSelector((state) => state.textReducer.markerPosition);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -14,6 +15,7 @@ const Text = () => {
     const values = {
       title: e.target[0].value,
       description: e.target[0].value,
+      position,
     };
 
     dispatch(setInfoText(values));
@@ -33,6 +35,7 @@ const Text = () => {
         </div>
         <div className={styles.submitBlock}>
           <input type="submit" value="Post" />
+          <input type="reset" value="Reset" />
         </div>
       </form>
     </div>

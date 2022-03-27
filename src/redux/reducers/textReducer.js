@@ -1,9 +1,14 @@
-import { SET_MODAL, SET_INFO_TEXT, SET_MARKER_POSITION } from "../actions/text";
+import {
+  SET_MODAL,
+  SET_INFO_TEXT,
+  SET_MARKER_POSITION,
+  DELETE_INFO_TEXT,
+} from "../actions/text";
 
 const initialState = {
-  showModal: true,
+  showModal: false,
   infoText: [],
-  markerPositions: [],
+  markerPosition: {},
 };
 
 export const textReducer = (state = initialState, action) => {
@@ -21,8 +26,13 @@ export const textReducer = (state = initialState, action) => {
     case SET_MARKER_POSITION:
       return {
         ...state,
-        markerPositions: [...state.markerPositions, action.payload],
+        markerPosition: { ...action.payload },
       };
+    case DELETE_INFO_TEXT:
+      return{
+        ...state,
+        infoText: action.payload,
+      }
     default:
       return {
         ...state,
