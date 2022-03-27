@@ -38,6 +38,9 @@ const defaultOptions = {
 };
 
 const Map = ({ center }) => {
+  
+  const dispatch = useDispatch();
+  
   const [valueDropdown, setValueDropdown] = useState(false);
 
   const [active, setActive] = useState(false);
