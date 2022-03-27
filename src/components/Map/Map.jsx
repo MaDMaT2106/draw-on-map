@@ -40,7 +40,7 @@ const defaultOptions = {
 const Map = ({ center }) => {
   const [valueDropdown, setValueDropdown] = useState(false);
 
-  const dispatch = useDispatch();
+  const [active, setActive] = useState(false);
 
   const infoText = useSelector((state) => state.textReducer.infoText);
 
@@ -120,10 +120,6 @@ const Map = ({ center }) => {
           }}
         />
 
-        {/* {infoText.map((item) => (
-          <Marker position={item.position} key={item.title} />
-        ))} */}
-
         {infoText &&
           infoText.map((item) => (
             <InfoWindow
@@ -155,6 +151,7 @@ const Map = ({ center }) => {
                     setTypeFigure(item);
                     setDrawing(true);
                     setSelectedShape(null);
+                    setActive(true);
                   }}
                 >
                   <div>{item}</div>
@@ -163,32 +160,57 @@ const Map = ({ center }) => {
             </DropdownMenu>
           </Dropdown>
         </div>
+        <div className={active ? style.activeMenu : style.disableMenu}>
+          <div className={style.colorInput}>
+            <input
+              type="color"
+              id="favcolor"
+              onChange={(e) => {
+                selectedShape.overlay.setOptions({ fillColor: e.target.value });
+              }}
+              name="favcolor"
+            />
+            <input
+              type="color"
+              id="strokecolor"
+              onChange={(e) => {
+                selectedShape.overlay.setOptions({
+                  strokeColor: e.target.value,
+                });
+              }}
+              name="strokecolor"
+            />
+          </div>
 
-        <div className={style.colorInput}>
+          <button
+            className={style.delete}
+            onClick={(e) => selectedShape.overlay.setMap(null)}
+          >
+            Delete
+          </button>
+
           <input
-            type="color"
-            id="favcolor"
+            className={style.input}
+            type="range"
+            id="vol"
+            name="vol"
+            min="0"
+            max="50"
             onChange={(e) => {
-              selectedShape.overlay.setOptions({ fillColor: e.target.value });
+              selectedShape.overlay.setOptions({
+                strokeWeight: e.target.value,
+              });
             }}
-            name="favcolor"
           />
-          <input
-            type="color"
-            id="strokecolor"
-            onChange={(e) => {
-              selectedShape.overlay.setOptions({ strokeColor: e.target.value });
+          <button
+            className={style.delete}
+            onClick={(e) => {
+              setActive(false);
             }}
-            name="strokecolor"
-          />
+          >
+            Cancell
+          </button>
         </div>
-
-        <button
-          className={style.delete}
-          onClick={(e) => selectedShape.overlay.setMap(null)}
-        >
-          Delete
-        </button>
       </div>
     </div>
   );
