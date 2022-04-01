@@ -1,5 +1,4 @@
-export const FIGURE_DATA_SUCCESS ="FIGURE_DATA_SUCCESS";
-
+export const FIGURE_DATA_SUCCESS = "FIGURE_DATA_SUCCESS";
 
 export function FigureDataSuccess(payload) {
   return {
@@ -8,8 +7,8 @@ export function FigureDataSuccess(payload) {
   };
 }
 
-
 export function figureData(figure) {
-  return (dispatch) => {dispatch(FigureDataSuccess(figure));
+  return (dispatch) => {
+    dispatch(FigureDataSuccess(figure));
   };
 }

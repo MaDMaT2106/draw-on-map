@@ -4,7 +4,7 @@ const initialState = {
   figures: [],
 };
 
-export function getFigures(state = initialState, action) {
+function getFigures(action, state = initialState) {
   switch (action.type) {
     case FIGURE_DATA_SUCCESS:
       return {
@@ -15,3 +15,5 @@ export function getFigures(state = initialState, action) {
       return state;
   }
 }
+
+export default getFigures;
