@@ -6,7 +6,7 @@ import Map from "../Map/Map";
 import Autocomplete from "../Autocomplete/Autocomplete";
 import TextForm from "../TextForm/TextForm";
 
-import { getBrowserLocation } from "../../utils/geo";
+import getBrowserLocation from "../../utils/geo";
 
 import styles from "./MainPage.module.css";
 

@@ -1,4 +1,4 @@
-export const defaultTheme = [
+const defaultTheme = [
   {
     featureType: "administrative",
     elementType: "all",
@@ -90,3 +90,5 @@ export const defaultTheme = [
     ],
   },
 ];
+
+export default defaultTheme;

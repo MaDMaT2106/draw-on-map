@@ -10,7 +10,7 @@ import {
   DropdownItem,
 } from "reactstrap";
 
-import { defaultTheme } from "./Theme";
+import defaultTheme from "./Theme";
 
 import MyInfoWindow from "../InfoWindow/InfoWindow";
 

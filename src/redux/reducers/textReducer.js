@@ -11,7 +11,7 @@ const initialState = {
   markerPosition: {},
 };
 
-export const textReducer = (state = initialState, action) => {
+const textReducer = (action, state = initialState) => {
   switch (action.type) {
     case SET_MODAL:
       return {
@@ -29,13 +29,15 @@ export const textReducer = (state = initialState, action) => {
         markerPosition: { ...action.payload },
       };
     case DELETE_INFO_TEXT:
-      return{
+      return {
         ...state,
         infoText: action.payload,
-      }
+      };
     default:
       return {
         ...state,
       };
   }
 };
+
+export default textReducer;

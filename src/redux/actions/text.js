@@ -34,7 +34,7 @@ export const deleteInfoTextSuccess = (payload) => {
 export const deleteInfoText = (info, title) => {
   return (dispatch) => {
     dispatch(
-      deleteInfoTextSuccess(info.filter((item) => item.title !== title))
+      deleteInfoTextSuccess(info.filter((item) => item.title !== title)),
     );
   };
 };
