@@ -5,7 +5,7 @@ import { setModal, setInfoText } from "../../redux/actions/text";
 
 import styles from "./TextForm.module.css";
 
-const TextForm = () => {
+function TextForm() {
   const dispatch = useDispatch();
   const position = useSelector((state) => state.textReducer.markerPosition);
 
@@ -29,12 +29,16 @@ const TextForm = () => {
     <div className={styles.textContainer}>
       <form className={styles.form} onSubmit={onSubmit}>
         <div className={styles.formBlock}>
-          <label>Title</label>
-          <input type="text" className={styles.input} name="title" />
+          <label htmlFor="title">Title</label>
+          <input type="text" className={styles.input} name="title" id="title" />
         </div>
         <div className={styles.formBlock}>
-          <label>Description</label>
-          <textarea className={styles.input} name="description" />
+          <label htmlFor="description">Description</label>
+          <textarea
+            className={styles.input}
+            name="description"
+            id="description"
+          />
         </div>
         <div className={styles.submitBlock}>
           <input type="submit" value="Post" className={styles.button} />
@@ -48,6 +52,6 @@ const TextForm = () => {
       </form>
     </div>
   );
-};
+}
 
 export default TextForm;

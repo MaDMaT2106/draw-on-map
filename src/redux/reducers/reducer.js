@@ -4,7 +4,7 @@ const initialState = {
   figures: [],
 };
 
-function getFigures(action, state = initialState) {
+function getFigures(state = initialState, action = {}) {
   switch (action.type) {
     case FIGURE_DATA_SUCCESS:
       return {

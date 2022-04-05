@@ -11,7 +11,7 @@ const initialState = {
   markerPosition: {},
 };
 
-const textReducer = (action, state = initialState) => {
+const textReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case SET_MODAL:
       return {
