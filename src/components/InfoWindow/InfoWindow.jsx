@@ -5,7 +5,7 @@ import { deleteInfoText } from "../../redux/actions/text";
 
 import styles from "./InfoWindow.module.css";
 
-const MyInfoWindow = () => {
+function MyInfoWindow() {
   const dispatch = useDispatch();
 
   const infoText = useSelector((state) => state.textReducer.infoText);
@@ -28,5 +28,5 @@ const MyInfoWindow = () => {
       ))}
     </div>
   );
-};
+}
 export default MyInfoWindow;

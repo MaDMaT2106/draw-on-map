@@ -18,7 +18,7 @@ const defaultCenter = {
 
 const libraries = ["places", "drawing"];
 
-const MainPage = () => {
+function MainPage() {
   const showModal = useSelector((state) => state.textReducer.showModal);
   const [center, setCenter] = React.useState(defaultCenter);
   const { isLoaded } = useJsApiLoader({
@@ -50,6 +50,6 @@ const MainPage = () => {
       {showModal && <TextForm />}
     </div>
   );
-};
+}
 
 export default MainPage;

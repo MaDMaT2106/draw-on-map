@@ -7,7 +7,7 @@ import useOnclickOutside from "react-cool-onclickoutside";
 
 import styles from "./Autocomplete.module.css";
 
-const Autocomplete = ({ isLoaded, onSelect }) => {
+function Autocomplete({ isLoaded, onSelect }) {
   const {
     ready,
     value,
@@ -53,17 +53,17 @@ const Autocomplete = ({ isLoaded, onSelect }) => {
   const renderSuggestions = () =>
     data.map((suggestion) => {
       const {
-        place_id,
-        structured_formatting: { main_text, secondary_text },
+        placeId,
+        structured_formatting: { mainText, secondaryText },
       } = suggestion;
 
       return (
         <li
           className={styles.listItem}
-          key={place_id}
+          key={placeId}
           onClick={handleSelect(suggestion)}
         >
-          <strong>{main_text}</strong> <small>{secondary_text}</small>
+          <strong>{mainText}</strong> <small>{secondaryText}</small>
         </li>
       );
     });
@@ -89,6 +89,6 @@ const Autocomplete = ({ isLoaded, onSelect }) => {
       )}
     </div>
   );
-};
+}
 
 export default Autocomplete;

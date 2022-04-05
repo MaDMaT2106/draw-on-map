@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import style from "./Map.module.css";
 import { useDispatch } from "react-redux";
 import { GoogleMap, DrawingManager } from "@react-google-maps/api";
 
@@ -9,6 +8,8 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
+
+import style from "./Map.module.css";
 
 import defaultTheme from "./Theme";
 
@@ -36,13 +37,10 @@ const defaultOptions = {
   styles: defaultTheme,
 };
 
-const Map = ({ center }) => {
-  
+function Map({ center }) {
   const dispatch = useDispatch();
-  
-  const [valueDropdown, setValueDropdown] = useState(false);
 
-  const dispatch = useDispatch();
+  const [valueDropdown, setValueDropdown] = useState(false);
 
   const [active, setActive] = useState(false);
 
@@ -59,7 +57,7 @@ const Map = ({ center }) => {
     mapRef.current = map;
   }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
+  const onUnmount = React.useCallback(function callback() {
     mapRef.current = undefined;
   }, []);
 
@@ -133,9 +131,9 @@ const Map = ({ center }) => {
           >
             <DropdownToggle caret>+</DropdownToggle>
             <DropdownMenu>
-              {types.map((item, i) => (
+              {types.map((item) => (
                 <DropdownItem
-                  key={i}
+                  // key={i}
                   onClick={() => {
                     setTypeFigure(item);
                     setDrawing(true);
@@ -172,8 +170,9 @@ const Map = ({ center }) => {
           </div>
 
           <button
+            type="button"
             className={style.delete}
-            onClick={(e) => selectedShape.overlay.setMap(null)}
+            onClick={() => selectedShape.overlay.setMap(null)}
           >
             Delete
           </button>
@@ -192,8 +191,9 @@ const Map = ({ center }) => {
             }}
           />
           <button
+            type="button"
             className={style.delete}
-            onClick={(e) => {
+            onClick={() => {
               setActive(false);
             }}
           >
@@ -203,5 +203,5 @@ const Map = ({ center }) => {
       </div>
     </div>
   );
-};
+}
 export default React.memo(Map);
